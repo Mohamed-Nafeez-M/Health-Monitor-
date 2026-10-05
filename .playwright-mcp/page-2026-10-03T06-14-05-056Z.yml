@@ -1,0 +1,81 @@
+- generic [ref=f1e2]:
+  - main [ref=f1e3]:
+    - generic [ref=f1e4]:
+      - generic [ref=f1e9]:
+        - generic [ref=f1e10]: FIELDNOTE / SIGNAL LAB
+        - generic [ref=f1e11]: ESP32 ENVELOPE VALIDATION
+      - generic [ref=f1e12]:
+        - generic [ref=f1e13]: RECONNECTING
+        - generic [ref=f1e17]: SOCKET.IO
+    - generic [ref=f1e22]:
+      - generic [ref=f1e23]:
+        - generic [ref=f1e24]:
+          - generic [ref=f1e25]: BENCH INSTRUMENT / 01
+          - heading "Signal overview" [level=1] [ref=f1e27]
+          - paragraph [ref=f1e28]: Live envelope processing from the current measurement window.
+        - button "Refresh readings" [ref=f1e29] [cursor=pointer]
+      - region "Signal source and status" [ref=f1e34]:
+        - generic [ref=f1e41]:
+          - generic [ref=f1e42]: SIGNAL SOURCE
+          - generic [ref=f1e43]: ESP32 envelope pipeline
+        - generic [ref=f1e46]:
+          - generic [ref=f1e47]: ESP32 STATUS
+          - generic [ref=f1e48]: DISCONNECTED
+        - generic [ref=f1e50]:
+          - generic [ref=f1e51]: SIGNAL STATE
+          - generic [ref=f1e52]: —
+        - generic [ref=f1e55]: Representative ESP32-generated envelope waveform — not a piezo sensor PWM output.
+      - generic [ref=f1e56]:
+        - generic [ref=f1e57]:
+          - generic [ref=f1e58]:
+            - generic [ref=f1e59]:
+              - generic [ref=f1e60]: LIVE MEASUREMENT
+              - heading "Live envelope waveform" [level=2] [ref=f1e62]
+            - generic [ref=f1e63]:
+              - 'status "Waveform health: FAULTY. The current window is missing, incomplete, or contains invalid ADC samples." [ref=f1e64]':
+                - generic [ref=f1e66]:
+                  - generic [ref=f1e67]: WAVEFORM HEALTH
+                  - strong [ref=f1e68]: FAULTY
+              - generic [ref=f1e69]: WINDOW 1.000 s
+          - img "Live envelope waveform, one second at 1000 hertz" [ref=f1e71]:
+            - generic [ref=f1e72]: —
+            - generic [ref=f1e74]: —
+            - generic [ref=f1e76]: —
+            - generic [ref=f1e78]: "0.00"
+            - generic [ref=f1e80]: "0.25"
+            - generic [ref=f1e82]: "0.50"
+            - generic [ref=f1e84]: "0.75"
+            - generic [ref=f1e86]: "1.00"
+            - generic [ref=f1e88]: Awaiting 1,000-sample window
+            - generic [ref=f1e89]: TIME · SECONDS
+            - generic [ref=f1e90]: ADC AMPLITUDE
+          - generic [ref=f1e91]:
+            - generic [ref=f1e92]:
+              - text: ENVELOPE AMPLITUDE
+              - generic [ref=f1e94]: 1,000 SAMPLES
+            - generic [ref=f1e95]:
+              - generic [ref=f1e96]: 1 kHz
+              - generic [ref=f1e97]: /
+              - generic [ref=f1e98]: 0–1 sec
+        - complementary [ref=f1e99]:
+          - generic [ref=f1e100]:
+            - generic [ref=f1e101]: WINDOW READOUT
+            - generic [ref=f1e102]: SNAPSHOT —
+          - generic [ref=f1e108]: "Waveform health: Healthy for normal controller signal. Critical for peak ≥ 3,686 ADC, crest factor ≥ 6.0, or ≥ 8 events/s. Faulty for no signal, incomplete window, or stale/disconnected stream."
+          - generic [ref=f1e109]:
+            - generic [ref=f1e110]:
+              - generic [ref=f1e111]: SAMPLE COUNT
+              - strong [ref=f1e112]: — / 1,000
+            - generic [ref=f1e113]:
+              - generic [ref=f1e114]: LAST UPDATE
+              - strong [ref=f1e115]: —
+      - generic [ref=f1e120]:
+        - generic [ref=f1e121]:
+          - generic [ref=f1e122]: RECENT WINDOWS
+          - heading "Measurement history" [level=2] [ref=f1e123]
+        - generic [ref=f1e124]: 00 RECORDS
+      - generic [ref=f1e130]:
+        - generic [ref=f1e131]: EMBEDDED SIGNAL INSTRUMENTATION
+        - generic [ref=f1e132]: ADC WINDOW · 1000 SAMPLES · 1000 Hz
+  - region "Notifications (F8)":
+    - list

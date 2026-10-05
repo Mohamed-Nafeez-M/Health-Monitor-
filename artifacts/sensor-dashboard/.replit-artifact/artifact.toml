@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Sensor Signal Dashboard"
+description = "A real-time engineering dashboard for monitoring ESP32 envelope-signal processing, with a realistic demo waveform, live metrics, Socket.IO updates, and PostgreSQL measurement history."
+version = "1.0.0"
+id = "artifacts/sensor-dashboard"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 26248
+
+[services.development]
+run = "pnpm --filter @workspace/sensor-dashboard run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sensor-dashboard", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/sensor-dashboard/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "26248"
+BASE_PATH = "/"

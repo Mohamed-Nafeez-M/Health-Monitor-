@@ -1,0 +1,239 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Real-time envelope-signal measurements from the ESP32 prototype or demo generator
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: sensor
+    description: Live sensor measurements, history, and ESP32 ingestion
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /sensor/latest:
+    get:
+      operationId: getSensorLatest
+      tags: [sensor]
+      summary: Get the latest processed sensor window
+      responses:
+        "200":
+          description: Latest one-second sensor measurement and raw samples
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SensorSnapshot"
+        "404":
+          description: No sensor measurement has been received
+  /sensor/history:
+    get:
+      operationId: getSensorHistory
+      tags: [sensor]
+      summary: Get recent processed measurements
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 25
+      responses:
+        "200":
+          description: Recent persisted measurements, newest first
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SensorHistoryResponse"
+  /sensor/data:
+    post:
+      operationId: postSensorData
+      tags: [sensor]
+      summary: Receive one sampled window from an ESP32
+      description: Accepts exactly 1000 ADC samples at 1000 Hz. The server validates optional device-computed features and derives authoritative features from the samples before broadcasting and storing the measurement.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SensorDataInput"
+      responses:
+        "201":
+          description: Processed measurement accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SensorSnapshot"
+        "400":
+          description: Invalid sensor window
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    SensorDataInput:
+      type: object
+      required: [samples, samplingRate]
+      properties:
+        samples:
+          type: array
+          minItems: 1000
+          maxItems: 1000
+          items:
+            type: number
+        samplingRate:
+          type: integer
+          const: 1000
+        healthState:
+          type: string
+          enum: [H, C, F, HEALTHY, CRITICAL, FAULTY]
+          description: MOSFET health reported by the ESP32 (H=HEALTHY, C=CRITICAL, F=FAULTY). Stored and broadcast as-is; never inferred by the server or dashboard.
+        mean:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        rms:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        peak:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        stdDev:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        energy:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        crestFactor:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+        eventsPerSecond:
+          type: number
+          description: Optional device-computed metric; the server recomputes it from samples.
+    SensorSnapshot:
+      type: object
+      required:
+        - id
+        - timestamp
+        - samples
+        - samplingRate
+        - sampleCount
+        - mean
+        - rms
+        - peak
+        - stdDev
+        - energy
+        - crestFactor
+        - eventsPerSecond
+        - signalStatus
+        - healthState
+        - connectionStatus
+        - currentEventCount
+      properties:
+        id:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        samples:
+          type: array
+          minItems: 1000
+          maxItems: 1000
+          items:
+            type: number
+        samplingRate:
+          type: integer
+          const: 1000
+        sampleCount:
+          type: integer
+        mean:
+          type: number
+        rms:
+          type: number
+        peak:
+          type: number
+        stdDev:
+          type: number
+        energy:
+          type: number
+        crestFactor:
+          type: number
+        eventsPerSecond:
+          type: number
+        signalStatus:
+          type: string
+          enum: [DETECTED, "NO SIGNAL"]
+        healthState:
+          type: [string, "null"]
+          enum: [HEALTHY, CRITICAL, FAULTY, null]
+          description: MOSFET health reported by the ESP32. Null if the device did not report one.
+        connectionStatus:
+          type: string
+          enum: [DEMO MODE, CONNECTED, DISCONNECTED]
+        currentEventCount:
+          type: integer
+    SensorHistoryItem:
+      type: object
+      required:
+        - id
+        - timestamp
+        - samplingRate
+        - sampleCount
+        - rms
+        - peak
+        - energy
+        - eventsPerSecond
+        - signalStatus
+        - healthState
+      properties:
+        id:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        samplingRate:
+          type: integer
+        sampleCount:
+          type: integer
+        rms:
+          type: number
+        peak:
+          type: number
+        energy:
+          type: number
+        eventsPerSecond:
+          type: number
+        signalStatus:
+          type: string
+          enum: [DETECTED, "NO SIGNAL"]
+        healthState:
+          type: [string, "null"]
+          enum: [HEALTHY, CRITICAL, FAULTY, null]
+    SensorHistoryResponse:
+      type: object
+      required: [measurements]
+      properties:
+        measurements:
+          type: array
+          items:
+            $ref: "#/components/schemas/SensorHistoryItem"
+

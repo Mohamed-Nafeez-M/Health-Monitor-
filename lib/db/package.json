@@ -1,0 +1,23 @@
+{
+  "name": "@workspace/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./src/schema/index.js"
+  },
+  "scripts": {
+    "push": "drizzle-kit push --config ./drizzle.config.js",
+    "push-force": "drizzle-kit push --force --config ./drizzle.config.js"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "drizzle-zod": "^0.8.3",
+    "pg": "^8.23.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10"
+  }
+}

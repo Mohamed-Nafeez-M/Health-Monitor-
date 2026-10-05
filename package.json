@@ -1,0 +1,25 @@
+{
+  "name": "sensor-signal-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "workspaces": [
+    "artifacts/api-server",
+    "artifacts/sensor-dashboard",
+    "lib/api-client-react",
+    "lib/api-zod",
+    "lib/db"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "npm run build --workspace=@workspace/api-server && npm run build --workspace=@workspace/sensor-dashboard",
+    "db:push": "npm run push --workspace=@workspace/db"
+  },
+  "overrides": {
+    "esbuild": "0.28.2",
+    "js-yaml": "4.3.2"
+  }
+}
